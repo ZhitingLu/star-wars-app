@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: starwars-backend
+    expose:
+      - "8000"   # Expose internally, no host port
+    networks:
+      - starwars-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: starwars-frontend
+    expose:
+      - "3000"   # Expose internally
+    networks:
+      - starwars-net
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: starwars-nginx
+    ports:
+      - "6969:80"   # Expose port 6969 externally
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - starwars-net
+
+networks:
+  starwars-net:
+    driver: bridge
