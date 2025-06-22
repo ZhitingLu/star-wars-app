@@ -13,3 +13,7 @@
 # Logs
 *.log
 
+*.pyc
+__pycache__/
+
+

@@ -36,3 +36,7 @@ Pipfile.lock
 
 # Environment variables
 .env
+
+*.pyc
+__pycache__/
+
