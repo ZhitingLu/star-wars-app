@@ -31,7 +31,5 @@ jobs:
         run: |
           flake8 .
 
-      - name: Run backend tests
-        working-directory: ./backend
-        run: |
-          pytest tests
+      - name: Run Backend tests in Docker
+        run: docker compose run backend pytest -v tests
