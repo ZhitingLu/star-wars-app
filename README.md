@@ -76,6 +76,8 @@ docker compose run frontend npx vitest
 
 - Dockerfiles handle building production-ready containers for each service
 
+---
+
 ## CI/CD Pipelines
 
 - Backend CI runs Python tests inside the Docker container
@@ -84,15 +86,18 @@ docker compose run frontend npx vitest
 
 - Healthchecks configured for Docker Compose to ensure service readiness
 
+---
+
 ## Technologies Used
 
-- ** Frontend:** Next.js 15, Tailwind CSS, Vitest, Playwright
+- **Frontend:** Next.js 15, Tailwind CSS, Vitest, Playwright
 
-- ** Backend:** Python, FastAPI, unittest, pytest
+- **Backend:** Python, FastAPI, unittest, pytest
 
-- ** Docker:** Multi-stage builds, docker-compose
+- **Docker:** Multi-stage builds, docker-compose
 
-- ** External API:** awapi.info
+- **External API:** awapi.info
 
+---
 License
 MIT © zlu
