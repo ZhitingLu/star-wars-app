@@ -16,8 +16,8 @@ services:
     networks:
       - starwars-net
     healthcheck:  
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api"]
-      interval: 90s
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api || exit 1"]
+      interval: 30s
       timeout: 10s
       retries: 3
     # deploy:  # Moved deploy resources here (more logical for backend)
