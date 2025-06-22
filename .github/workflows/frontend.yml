@@ -21,11 +21,13 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: |
-          cd frontend
-          npm install
-
+        working-directory: ./frontend
+        run: npm install
+      
       - name: Run tests
+        working-directory: ./frontend
+        run: npm test
+
+      - name: Build frontend Docker image
         run: |
-          cd frontend
-          npm test
+          docker build -t starwars-frontend ./frontend
