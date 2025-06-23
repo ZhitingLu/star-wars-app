@@ -64,10 +64,13 @@ class Person(BaseModel):
     gender: Optional[str] = Field(
         None,
         description="Gender identity")
-
     homeworld: Optional[HttpUrl] = Field(
         None,
-        description="URL to the person's homeworld"
+        description="URL of the person's homeworld (internal use)"
+    )
+    homeworld_name: Optional[str] = Field(
+        None,
+        description="Name of the person's homeworld planet"
     )
     films: List[HttpUrl] = Field(
         default_factory=list,
@@ -103,9 +106,7 @@ class Planet(BaseModel):
     Represents a planet object as returned by the SWAPI.
     Matches the SWAPI /planets data structure.
     """
-    name: str = Field(
-        ...,
-        description="Name of the planet")
+    name: str = Field(..., description="Name of the planet")
     rotation_period: Optional[str] = Field(
         None,
         description="Rotation period in hours")
