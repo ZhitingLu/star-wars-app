@@ -23,7 +23,7 @@ async def read_root():
     return {"message": "Welcome, Star Wars fans!"}
 
 
-@router.get("/api")
+@router.get("/health", tags=["Health Check"])
 async def health_check():
     return {"status": "ok"}
 
