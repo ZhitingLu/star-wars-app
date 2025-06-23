@@ -6,7 +6,7 @@ services:
     expose:
       - "8000"   # Expose internally, no host port
     ports:
-      - "8000:8000"  # Add this to access backend directly
+      - "${BACKEND_PORT}:8000"  # Add this to access backend directly
     working_dir: /app
     volumes:
       - ./backend/app:/app/app
@@ -16,10 +16,12 @@ services:
     networks:
       - starwars-net
     healthcheck:  
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/api || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped 
+
     # deploy:  # Moved deploy resources here (more logical for backend)
     #   resources:
     #     limits:
@@ -33,20 +35,21 @@ services:
     expose:
       - "3000"   # Expose internally
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:3000"
     networks:
       - starwars-net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 90s
+      interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped 
 
   nginx:
     image: nginx:stable-alpine
     container_name: starwars-nginx
     ports:
-      - "6969:80"   # Expose port 6969 externally
+      - "${NGINX_PORT}:80"   # Expose port 6969 externally
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -56,6 +59,7 @@ services:
         condition: service_started  # frontend can start without healthcheck   
     networks:
       - starwars-net
+    restart: unless-stopped 
 
 networks:
   starwars-net:
