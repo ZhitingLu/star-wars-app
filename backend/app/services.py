@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 import httpx
 
 BASE_SWAPI_URL = "https://swapi.info/api"
+ALLOWED_SORT_FIELDS = {"name", "created"}
 
 
 async def fetch_all_swapi_resource(resource: str) -> List[Dict[str, Any]]:
@@ -56,12 +57,33 @@ async def get_filtered_sorted_paginated_items(
     # Paginate locally
     total_count = len(sorted_items)
     start = (page - 1) * per_page
-    end = start + per_page
-    paginated_items = sorted_items[start:end]
 
-    # Build next/previous URLs or None
-    next_page = f"/{resource}?page={page + 1}" if end < total_count else None
-    prev_page = f"/{resource}?page={page - 1}" if page > 1 else None
+    # handle the case where page requested is beyond available pages gracefully
+    if start >= total_count:
+        paginated_items = []
+    else:
+        paginated_items = sorted_items[start:start + per_page]
+
+    def build_page_url(p):
+        if p < 1 or p > (total_count + per_page - 1) // per_page:
+            return None
+        params = [f"page={p}"]
+        if search:
+            params.append(f"search={search}")
+        if sort_by:
+            params.append(f"sort_by={sort_by}")
+        if descending:
+            params.append("order=desc")
+        else:
+            params.append("order=asc")
+        return f"/{resource}?" + "&".join(params)
+
+    next_page = (
+        build_page_url(page + 1)
+        if start + per_page < total_count
+        else None
+    )
+    prev_page = build_page_url(page - 1) if page > 1 else None
 
     return {
         "count": total_count,
@@ -90,7 +112,7 @@ def sort_items(
         items: List[Dict[str, Any]],
         sort_by: str,
         descending: bool = False,
-        allowed_fields: set = {"name", "created"}  # configurable
+        allowed_fields: set = ALLOWED_SORT_FIELDS,  # configurable
 ) -> List[Dict[str, Any]]:
     """
     Sort a list of items by a given key.
