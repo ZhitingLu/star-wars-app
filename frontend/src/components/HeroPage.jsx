@@ -4,6 +4,7 @@ import React from "react";
 import { useState } from "react";
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { FaGithub } from "react-icons/fa6";
 
 const navigation = [
   { name: "People", href: "#" },
@@ -24,7 +25,7 @@ export default function HeroPage() {
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Star Wars Explorer</span>
-              <img alt="" src="/favicon.ico" className="h-8 w-auto" />
+              <img alt="" src="/favicon.ico" className="h-14 w-auto" />
             </a>
           </div>
           <div className="flex lg:hidden">
@@ -49,8 +50,15 @@ export default function HeroPage() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-white">
-              Log in <span aria-hidden="true">&rarr;</span>
+            <a
+              href="https://github.com/ZhitingLu/star-wars-app"
+              target="_blank"
+              className="text-sm/6 font-semibold text-amber-300 flex items-center gap-2"
+            >
+              <FaGithub className="h-8 w-auto" />{" "}
+              <span className="text-xl" aria-hidden="true">
+                &rarr;
+              </span>
             </a>
           </div>
         </nav>
@@ -103,7 +111,6 @@ export default function HeroPage() {
       </header>
 
       <div className="relative isolate overflow-hidden pt-14">
-
         <video
           autoPlay
           loop
@@ -131,7 +138,12 @@ export default function HeroPage() {
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
               <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
                 Data powered by{" "}
-                <a href="https://swapi.info/" className="font-semibold text-amber-400" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://swapi.info/"
+                  className="font-semibold text-amber-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span aria-hidden="true" className="absolute inset-0 " />
                   SWAPI <span aria-hidden="true">&rarr;</span>
                 </a>
