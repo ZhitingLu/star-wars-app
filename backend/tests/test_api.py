@@ -13,7 +13,7 @@ async def test_root():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        response = await ac.get("/")
+        response = await ac.get("/api/")
     assert response.status_code == 200
     assert response.json() == {"message": "Welcome, Star Wars fans!"}
 
@@ -27,14 +27,15 @@ async def test_get_people():
     - HTTP 200 OK response
     - Response has the keys: count, next, previous, results
     - Results is a list
-    - Each person in results contains expected fields (like 'name')
+    - Each person in results contains expected fields
+    - (like 'name', 'homeworld_name)
     """
     transport = ASGITransport(app=app)
     async with AsyncClient(
             transport=transport,
             base_url="http://test"
     ) as client:
-        response = await client.get("/people")
+        response = await client.get("/api/people")
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -50,8 +51,12 @@ async def test_get_people():
             "'name' field missing in person object"
         assert "gender" in person, \
             "'gender' field missing in person object"
-        assert "homeworld" in person, \
-            "'homeworld' field missing in person object"
+        assert "url" in person, \
+            "'url' field missing in person object"
+        assert "homeworld_name" in person, \
+            "'homeworld_name' field missing in person object"
+        assert person["homeworld_name"] is not None, \
+            "'homeworld_name' should not be None"
 
 
 @pytest.mark.asyncio
@@ -71,7 +76,7 @@ async def test_get_planets():
             transport=transport,
             base_url="http://test"
     ) as client):
-        response = await client.get("/planets")
+        response = await client.get("/api/planets")
 
     # Ensure response is successful
     assert response.status_code == status.HTTP_200_OK
