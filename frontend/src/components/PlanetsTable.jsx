@@ -27,7 +27,7 @@ export default function PlanetsTable() {
   } = useSwapiTable(fetchPlanets, "name");
 
   return (
-    <div className="bg-slate-900 py-10 mx-auto max-w-7xl rounded">
+    <div className="bg-slate-900 py-8 mx-auto max-w-7xl rounded">
       <div className="flex items-center justify-between border-b border-white/10 py-3">
         <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
           Planets
