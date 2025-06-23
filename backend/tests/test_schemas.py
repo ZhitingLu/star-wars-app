@@ -26,7 +26,7 @@ def test_person_model_valid():
         "eye_color": "blue",
         "birth_year": "19BBY",
         "gender": "male",
-        "homeworld": "https://swapi.info/api/planets/1/",
+        "homeworld_name": "Tatooine",
         "films": ["https://swapi.info/api/films/1/"],
         "species": [],
         "vehicles": [],
@@ -39,7 +39,7 @@ def test_person_model_valid():
     person = Person.model_validate(data)
     assert person.name == "Luke Skywalker"
     assert isinstance(person.created, datetime)
-    assert person.homeworld == HttpUrl("https://swapi.info/api/planets/1/")
+    assert person.url == HttpUrl("https://swapi.info/api/people/1/")
 
 
 def test_person_model_missing_required():
