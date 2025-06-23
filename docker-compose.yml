@@ -16,7 +16,7 @@ services:
     networks:
       - starwars-net
     healthcheck:  
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
