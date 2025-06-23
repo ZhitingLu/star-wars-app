@@ -85,17 +85,46 @@ npx vitest
 ```
 
 ## Development
-
+  ### Frontend
 - Frontend source code lives in **/frontend**
 
   #### To enable hot reload during development and run the application using Docker Compose, use the development compose file:
+    In root directory:
      ```
     docker compose -f docker-compose.dev.yml up
-     ```    
-      
+     ```   
+  ### Frontend Dev practice
+  
+  #### Add dependency locally (in /frontend):
+    ```aiignore
+    cd frontend/
+    npm install something
+    ```
+  #### Rebuild container after adding dependencies (in root):
+    ```
+    cd ../ 
+    docker compose -f docker-compose.dev.yml build
+    ```
+  #### Bring it back up:
+    ```aiignore
+    docker compose -f docker-compose.dev.yml up
+    ```
+  
+### Backend
 - Backend source code lives in **/backend**
-
+  
+  
+### Docker
 - Dockerfiles handle building production-ready containers for each service
+
+  ### Optional: Clean Up Orphan Containers
+  ```aiignore
+  docker compose -f docker-compose.dev.yml down --remove-orphans
+  ```
+  or
+   ```aiignore
+    docker compose -f docker-compose.yml down --remove-orphans
+  ```
 
 ---
 
