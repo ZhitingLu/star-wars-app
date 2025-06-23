@@ -72,7 +72,7 @@ export default function HeroPage() {
             <div className="flex items-center justify-between">
               <a href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Star Wars Explorer</span>
-                <img alt="" src="/favicon.ico" className="h-8 w-auto" />
+                <img alt="" src="/favicon.ico" className="h-10 w-auto" />
               </a>
               <button
                 type="button"
@@ -98,10 +98,11 @@ export default function HeroPage() {
                 </div>
                 <div className="py-6">
                   <a
-                    href="#"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800"
+                    href="https://github.com/ZhitingLu/star-wars-app"
+                    target="_blank"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-amber-300 hover:bg-gray-800"
                   >
-                    Log in
+                    <FaGithub className="h-6 w-auto" />
                   </a>
                 </div>
               </div>
