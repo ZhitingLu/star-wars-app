@@ -6,9 +6,10 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FaGithub } from "react-icons/fa6";
 
+
 const navigation = [
-  { name: "People", href: "#" },
-  { name: "Planets", href: "#" },
+  { name: "People", href: "#people" },
+  { name: "Planets", href: "#planets" },
   { name: "About", href: "#" },
 ];
 
