@@ -20,6 +20,22 @@ async def fetch_all_swapi_resource(resource: str) -> List[Dict[str, Any]]:
         return data.get("results", [])
 
 
+async def fetch_swapi_resource_by_url(url: str) -> Optional[Dict[str, Any]]:
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, follow_redirects=True)
+            response.raise_for_status()
+            json_data = response.json()
+            print(f"Fetched {url}: {json_data.get('name', 'No name found')}")
+            return json_data
+        except httpx.HTTPStatusError as e:
+            print(f"HTTP error fetching {url}: {e}")
+            return None
+        except Exception as e:
+            print(f"Unexpected error fetching {url}: {e}")
+            return None
+
+
 async def get_filtered_sorted_paginated_items(
         resource: str,
         page: int,
