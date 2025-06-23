@@ -1,44 +1,44 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { fetchPeople } from "@/lib/swapiClient";
+import { useSwapiTable } from "@/lib/useSwapiTable";
 import SkeletonRow from "./SkeletonRow";
 import Pagination from "./Pagination";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import SearchBar from "./SearchBar";
+import { SortArrow } from "./SortArrow";
 
 export default function PeopleTable() {
-  const [people, setPeople] = useState([]);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const {
+    items: people,
+    page,
+    total,
+    loading,
+    searchQuery,
+    sortBy,
+    order,
+    setPage,
+    handleSearch,
+    handleSort,
+  } = useSwapiTable(fetchPeople, "name");
 
-  useEffect(() => {
-    async function loadPeople() {
-      setLoading(true);
-      try {
-        const data = await fetchPeople({ page });
-        setPeople(data.results);
-        setTotal(data.count);
-      } catch (err) {
-        console.error("Error fetching people:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadPeople();
-  }, [page]);
 
   return (
     <div className="bg-slate-900 py-10 mx-auto max-w-7xl rounded">
-      <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
-        People
-      </h2>
+      <div className="flex items-center justify-between border-b border-white/10 py-3">
+        <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
+          People
+        </h2>
+        <div className="px-4 sm:px-6 lg:px-8">
+          <SearchBar
+            placeholder="Search people by name..."
+            onSearch={handleSearch}
+          />
+        </div>
+      </div>
       <div className="" style={{ minHeight: `768px` }}>
         {loading ? (
+          // Show skeleton rows while loading
           <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
             <colgroup>
               <col className="w-full sm:w-4/12" />
@@ -78,14 +78,20 @@ export default function PeopleTable() {
               </colgroup>
               <thead className="border-b border-white/10 text-sm text-white">
                 <tr>
-                  <th className="py-2 pr-8 pl-4 font-semibold sm:pl-6 lg:pl-8">
-                    Name
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="py-2 pr-8 pl-4 font-semibold sm:pl-6 lg:pl-8 cursor-pointer"
+                  >
+                    Name <SortArrow column="name" sortBy={sortBy} order={order} />
                   </th>
                   <th className="py-2 pr-4 pl-0 font-semibold">Birth Year</th>
                   <th className="py-2 pr-4 pl-0 font-semibold">Gender</th>
                   <th className="py-2 pr-4 pl-0 font-semibold">Homeworld</th>
-                  <th className="py-2 pr-6 pl-0 font-semibold text-right">
-                    Created
+                  <th
+                    onClick={() => handleSort("created")}
+                    className="py-2 pr-6 pl-0 font-semibold text-right cursor-pointer"
+                  >
+                    Created <SortArrow column="created" sortBy={sortBy} order={order} />
                   </th>
                 </tr>
               </thead>
@@ -122,32 +128,16 @@ export default function PeopleTable() {
                 ))}
               </tbody>
             </table>
-            {/* 
-            <div className="mt-4 flex justify-between items-center">
-              <button
-                className="bg-gray-700 px-4 py-2 rounded text-white disabled:opacity-50"
-                onClick={() => setPage((p) => p - 1)}
-                disabled={!hasPrev}
-              >
-                Previous
-              </button>
-              <span>Page {page}</span>
-              <button
-                className="bg-gray-700 px-4 py-2 rounded text-white disabled:opacity-50"
-                onClick={() => setPage((p) => p + 1)}
-                disabled={!hasNext}
-              >
-                Next
-              </button>
-            </div> */}
 
-              <Pagination
-                page={page}
-                total={total}
-                pageSize={15} 
-                onPageChange={(newPage) => setPage(newPage)}
-              />
-            
+            <Pagination
+              page={page}
+              total={total}
+              pageSize={15}
+              onPageChange={(newPage) => {
+                console.log("Page changed to:", newPage);
+                setPage(newPage);
+              }}
+            />
           </>
         )}
       </div>
