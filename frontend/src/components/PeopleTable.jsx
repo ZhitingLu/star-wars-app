@@ -22,9 +22,17 @@ export default function PeopleTable() {
     handleSort,
   } = useSwapiTable(fetchPeople, "name");
 
+  const getAvatarUrl = (personUrl) => {
+    // Use regex to extract the numeric ID from the personUrl
+    // Matches "/people/" followed by one or more digits (\d+)
+    // and either a trailing slash (/) or end of string ($)
+    const idMatch = personUrl.match(/\/people\/(\d+)(\/|$)/);
+    const id = idMatch ? idMatch[1] : null;
+    return id ? `/avatars/${id}.jpeg` : "/avatars/default.jpg"; // fallback to default if no id
+  };
 
   return (
-    <div className="bg-slate-900 py-10 mx-auto max-w-7xl rounded">
+    <div className="bg-slate-900 py-8 mx-auto max-w-7xl rounded">
       <div className="flex items-center justify-between border-b border-white/10 py-3">
         <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
           People
@@ -82,7 +90,8 @@ export default function PeopleTable() {
                     onClick={() => handleSort("name")}
                     className="py-2 pr-8 pl-4 font-semibold sm:pl-6 lg:pl-8 cursor-pointer"
                   >
-                    Name <SortArrow column="name" sortBy={sortBy} order={order} />
+                    Name{" "}
+                    <SortArrow column="name" sortBy={sortBy} order={order} />
                   </th>
                   <th className="py-2 pr-4 pl-0 font-semibold">Birth Year</th>
                   <th className="py-2 pr-4 pl-0 font-semibold">Gender</th>
@@ -91,7 +100,8 @@ export default function PeopleTable() {
                     onClick={() => handleSort("created")}
                     className="py-2 pr-6 pl-0 font-semibold text-right cursor-pointer"
                   >
-                    Created <SortArrow column="created" sortBy={sortBy} order={order} />
+                    Created{" "}
+                    <SortArrow column="created" sortBy={sortBy} order={order} />
                   </th>
                 </tr>
               </thead>
@@ -102,7 +112,7 @@ export default function PeopleTable() {
                       <div className="flex items-center gap-x-4">
                         <img
                           alt={person.name}
-                          src={person.imageUrl}
+                          src={getAvatarUrl(person.url)}
                           className="w-8 h-8 rounded-full bg-gray-800"
                         />
                         <div className="truncate text-sm font-medium text-white">
