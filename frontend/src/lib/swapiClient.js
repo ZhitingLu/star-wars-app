@@ -18,7 +18,7 @@ export async function fetchPeople(params = {}) {
     }
   });
 
-  return fetcher(url.toString());
+  return fetcher(url.toString()); // This returns { count, next, previous, results }
 }
 
 /**
@@ -27,12 +27,11 @@ export async function fetchPeople(params = {}) {
  */
 export async function fetchPlanets(params = {}) {
   const url = new URL(`${BASE_API_URL}/planets`);
-
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       url.searchParams.append(key, value);
     }
   });
 
-  return fetcher(url.toString());
+  return fetcher(url.toString()); // This returns { count, next, previous, results }
 }
