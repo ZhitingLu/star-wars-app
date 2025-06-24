@@ -102,7 +102,9 @@ export default function PlanetsTable() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {planets.map((planet) => (
-                  <tr key={planet.url}>
+                  <tr key={planet.url}
+                  className="group lightsaber-hover transition duration-300 ease-in-out"
+                  >
                     <td className="py-3 pr-8 pl-4 sm:pl-6 lg:pl-8">
                       <div className="truncate text-sm font-medium text-white">
                         {planet.name}
