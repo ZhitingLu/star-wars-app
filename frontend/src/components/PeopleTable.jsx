@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
-import { fetchPeople } from "@/lib/swapiClient";
+import React, { useState } from "react";
+import { fetchPeople, fetchAiInsight } from "@/lib/swapiClient";
 import { useSwapiTable } from "@/lib/useSwapiTable";
 import SkeletonRow from "./SkeletonRow";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchBar";
 import { SortArrow } from "./SortArrow";
+import AiInsightModal from "./AiInsightModal";
 
 export default function PeopleTable() {
   const {
@@ -22,10 +23,34 @@ export default function PeopleTable() {
     handleSort,
   } = useSwapiTable(fetchPeople, "name");
 
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [insightDescription, setInsightDescription] = useState("");
+  const [loadingInsight, setLoadingInsight] = useState(false);
+
+ async function handleFetchAiInsight(personName) {
+  setLoadingInsight(true);
+  try {
+    setInsightDescription("");
+    const insight = await fetchAiInsight(personName);
+    // insight is an object, so extract description
+    setInsightDescription(insight.description || "No AI insight available.");
+    const person = people.find((p) => p.name === personName);
+    setSelectedPerson(person);
+  } catch (e) {
+    console.error("Error fetching AI insight:", e);
+    setInsightDescription("Failed to load AI insight.");
+    setSelectedPerson({ name: personName, url: null });
+  } finally {
+    setLoadingInsight(false);
+  }
+}
+
+
+
   const getAvatarUrl = (personUrl) => {
-     // Use regex to extract the numeric ID from the personUrl
-  // Matches "/people/" followed by one or more digits (\d+)
-  // and either a trailing slash (/) or end of string ($)
+    // Use regex to extract the numeric ID from the personUrl
+    // Matches "/people/" followed by one or more digits (\d+)
+    // and either a trailing slash (/) or end of string ($)
     const idMatch = personUrl.match(/\/people\/(\d+)(\/|$)/);
     const id = idMatch ? idMatch[1] : null;
     return id ? `/avatars/${id}.jpeg` : "/avatars/default.jpg"; // fallback to default if no id
@@ -44,7 +69,10 @@ export default function PeopleTable() {
           />
         </div>
       </div>
-      <div className="overflow-x-auto px-4 sm:px-0" style={{ minHeight: `768px` }}>
+      <div
+        className="overflow-x-auto px-4 sm:px-0"
+        style={{ minHeight: `768px` }}
+      >
         {loading ? (
           // Show skeleton rows while loading
           <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
@@ -107,8 +135,10 @@ export default function PeopleTable() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {people.map((person) => (
-                  <tr key={person.url}
-                  className="group lightsaber-hover transition duration-300 ease-in-out">
+                  <tr
+                    key={person.url}
+                    className="group lightsaber-hover transition duration-300 ease-in-out"
+                  >
                     <td className="py-3 pr-8 pl-4 sm:pl-6 lg:pl-8">
                       <div className="flex items-center gap-x-4">
                         <img
@@ -118,6 +148,15 @@ export default function PeopleTable() {
                         />
                         <div className="truncate text-sm font-medium text-white">
                           {person.name}
+
+                          <button
+                            disabled={loadingInsight}
+                            onClick={() => handleFetchAiInsight(person.name)}
+                            className="ml-2 text-xs text-blue-400 hover:underline"
+                            title="Get AI Insight"
+                          >
+                            {loadingInsight ? "Loading..." : "AI Insight"}
+                          </button>
                         </div>
                       </div>
                     </td>
@@ -148,7 +187,13 @@ export default function PeopleTable() {
                 console.log("Page changed to:", newPage);
                 setPage(newPage);
               }}
-            />
+            /> 
+
+            <AiInsightModal
+        name={selectedPerson?.name}
+        description={insightDescription}
+        onClose={() => setSelectedPerson(null)}
+      />
           </>
         )}
       </div>
