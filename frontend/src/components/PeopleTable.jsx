@@ -23,16 +23,16 @@ export default function PeopleTable() {
   } = useSwapiTable(fetchPeople, "name");
 
   const getAvatarUrl = (personUrl) => {
-    // Use regex to extract the numeric ID from the personUrl
-    // Matches "/people/" followed by one or more digits (\d+)
-    // and either a trailing slash (/) or end of string ($)
+     // Use regex to extract the numeric ID from the personUrl
+  // Matches "/people/" followed by one or more digits (\d+)
+  // and either a trailing slash (/) or end of string ($)
     const idMatch = personUrl.match(/\/people\/(\d+)(\/|$)/);
     const id = idMatch ? idMatch[1] : null;
     return id ? `/avatars/${id}.jpeg` : "/avatars/default.jpg"; // fallback to default if no id
   };
 
   return (
-    <div className="bg-slate-900 py-8 mx-auto max-w-7xl rounded">
+    <div className="bg-slate-900 py-10 mx-auto max-w-7xl rounded">
       <div className="flex items-center justify-between border-b border-white/10 py-3">
         <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
           People
@@ -107,7 +107,8 @@ export default function PeopleTable() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {people.map((person) => (
-                  <tr key={person.url}>
+                  <tr key={person.url}
+                  className="group lightsaber-hover transition duration-300 ease-in-out">
                     <td className="py-3 pr-8 pl-4 sm:pl-6 lg:pl-8">
                       <div className="flex items-center gap-x-4">
                         <img
