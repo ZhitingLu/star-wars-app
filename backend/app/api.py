@@ -90,3 +90,18 @@ async def get_planets(
         descending=(order == SortOrder.desc),
     )
     return data
+
+
+@router.get("/simulate-ai-insight")
+async def simulate_ai_insight(name: str = Query(
+    ...,
+    description="Person or planet name"
+)):
+    # This is a quick mock response for demonstration.
+    fake_description = (
+        f"AI Insight for '{name}': "
+        "This entity exhibits fascinating characteristics "
+        "and plays a pivotal role "
+        "in the Star Wars universe according to our advanced simulations."
+    )
+    return {"name": name, "description": fake_description}
