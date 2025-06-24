@@ -17,14 +17,15 @@ export default function Home() {
         Your browser does not support the video tag.
       </video>
     <HeroPage />
-    <main className="bg-black/70 text-white px-6 py-8">
-        <section id="people" className="my-20">
-          <h2 className="text-3xl font-bold mb-6 text-center">People</h2>
+    <main className="bg-black/70 text-white px-0 sm:px-6  py-8">
+        <section id="people" className="my-10">
+          <h2 className="text-3xl font-bold mb-6 text-center
+            ">People</h2>
           <PeopleTable />
         </section>
 
-        <section id="planets" className="my-20">
-          <h2 className="text-3xl font-bold mb-6 text-center">Planets</h2>
+        <section id="planets" className="my-10">
+          <h2 className="text-3xl font-bold mb-6 text-center gradient-shadow-text">Planets</h2>
           <PlanetsTable />
         </section>
       </main>
