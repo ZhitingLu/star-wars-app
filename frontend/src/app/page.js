@@ -1,3 +1,5 @@
+import About from "@/components/About";
+import Footer from "@/components/Footer";
 import HeroPage from "@/components/HeroPage";
 import PeopleTable from "@/components/PeopleTable";
 import PlanetsTable from "@/components/PlanetsTable";
@@ -28,7 +30,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-6 text-center gradient-shadow-text">Planets</h2>
           <PlanetsTable />
         </section>
+
+         <section id="about" className="my-10">
+          <h2 className="text-3xl font-bold mb-6 text-center gradient-shadow-text">About</h2>
+           <About />
+        </section>
       </main>
+     <Footer />
    </div>
   );
 }
