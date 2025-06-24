@@ -64,6 +64,7 @@ export default function Footer() {
                 <a
                   key={item.name}
                   href={item.href}
+                  target="_blank"
                   className="text-gray-400 hover:text-gray-300"
                 >
                   <span className="sr-only">{item.name}</span>
@@ -75,9 +76,7 @@ export default function Footer() {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-sm/6 font-semibold text-white">
-                  Sections
-                </h3>
+                <h3 className="text-sm/6 font-semibold text-white">Sections</h3>
                 <ul role="list" className="mt-6 space-y-4">
                   {navigation.sections.map((item) => (
                     <li key={item.name}>
