@@ -126,6 +126,45 @@ npx vitest
     docker compose -f docker-compose.yml down --remove-orphans
   ```
 
+### Nginx
+
+  Run with:
+
+  ```
+  docker compose up -d
+  ```
+  
+  Check logs with:
+  ```aiignore
+  docker compose logs -f nginx backend frontend
+  ```
+  
+  Check container health with:
+  ```
+  docker ps
+  ```
+  
+  Start Nginx manually (if needed)
+  ```aiignore
+  docker start -ai starwars-nginx
+  ```
+ Run nginx container with that network explicitly (if needed)
+  ```
+  docker run --rm -p 6969:80 \
+  --network star-wars-app_starwars-net \
+  -v $(pwd)/nginx/nginx.conf:/etc/nginx/nginx.conf:ro \
+  nginx:stable-alpine
+  ```
+
+  
+  Test endpoints on ports:
+  
+  http://localhost:6969 (nginx)
+  
+  http://localhost:8000/api/health (backend)
+  
+  http://localhost:3000 (frontend)
+
 ---
 
 ## CI/CD Pipelines
