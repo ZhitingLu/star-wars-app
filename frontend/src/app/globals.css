@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+
+h1, h2 {
+  font-family: 'Orbitron', sans-serif;
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
