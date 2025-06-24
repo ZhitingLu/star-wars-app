@@ -44,7 +44,7 @@ export default function PeopleTable() {
           />
         </div>
       </div>
-      <div className="" style={{ minHeight: `768px` }}>
+      <div className="overflow-x-auto px-4 sm:px-0" style={{ minHeight: `768px` }}>
         {loading ? (
           // Show skeleton rows while loading
           <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
@@ -76,7 +76,7 @@ export default function PeopleTable() {
           </table>
         ) : (
           <>
-            <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
+            <table className="mt-6 w-full text-left whitespace-nowrap min-w-full divide-y">
               <colgroup>
                 <col className="w-full sm:w-4/12" />
                 <col className="lg:w-2/12" />
@@ -88,7 +88,7 @@ export default function PeopleTable() {
                 <tr>
                   <th
                     onClick={() => handleSort("name")}
-                    className="py-2 pr-8 pl-4 font-semibold sm:pl-6 lg:pl-8 cursor-pointer"
+                    className="py-2 pr-8 pl-4 font-semibold sm:pl-2 lg:pl-8 cursor-pointer"
                   >
                     Name{" "}
                     <SortArrow column="name" sortBy={sortBy} order={order} />
