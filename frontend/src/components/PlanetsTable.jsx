@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
-import { fetchPlanets } from "@/lib/swapiClient";
+import React, {useState} from "react";
+import { fetchPlanets, fetchAiInsight } from "@/lib/swapiClient";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchBar";
 import SkeletonRow from "./SkeletonRow";
 import { useSwapiTable } from "@/lib/useSwapiTable";
 import { SortArrow } from "./SortArrow";
+import AiInsightModal from "./AiInsightModal";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,6 +26,37 @@ export default function PlanetsTable() {
     handleSearch,
     handleSort,
   } = useSwapiTable(fetchPlanets, "name");
+
+  const getPlanetUrl = (planetUrl) => {
+    // Use regex to extract the numeric ID from the personUrl
+    // Matches "/people/" followed by one or more digits (\d+)
+    // and either a trailing slash (/) or end of string ($)
+    const idMatch = planetUrl.match(/\/planets\/(\d+)(\/|$)/);
+    const id = idMatch ? idMatch[1] : null;
+    return id ? `/planets/${id}.jpeg` : "/galaxy.jpg"; // fallback to default if no id
+  };
+
+  const [selectedPlanet, setSelectedPlanet] = useState(null);
+  const [insightDescription, setInsightDescription] = useState("");
+  const [loadingInsight, setLoadingInsight] = useState(false);
+
+async function handleFetchAiInsight(planetName) {
+  setLoadingInsight(true);
+  try {
+    setInsightDescription("");
+    const insight = await fetchAiInsight(planetName);
+    setInsightDescription(insight.description || "No AI insight available.");
+
+    const planet = planets.find((p) => p.name === planetName);
+    setSelectedPlanet(planet);
+  } catch (e) {
+    console.error("Error fetching AI insight:", e);
+    setInsightDescription("Failed to load AI insight.");
+    setSelectedPlanet({ name: planetName, url: null });
+  } finally {
+    setLoadingInsight(false);
+  }
+}
 
   return (
     <div className="bg-slate-900 py-8 max-w-7xl mx-auto sm:mx-auto sm:px-0 lg:px-8 w-full rounded">
@@ -102,12 +134,28 @@ export default function PlanetsTable() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {planets.map((planet) => (
-                  <tr key={planet.url}
-                  className="group lightsaber-hover transition duration-300 ease-in-out"
+                  <tr
+                    key={planet.url}
+                    className="group lightsaber-hover transition duration-300 ease-in-out"
                   >
                     <td className="py-3 pr-8 pl-4 sm:pl-6 lg:pl-8">
-                      <div className="truncate text-sm font-medium text-white">
-                        {planet.name}
+                      <div className="flex items-center gap-x-4">
+                        <img
+                          alt={planet.name}
+                          src={getPlanetUrl(planet.url)}
+                          className="w-8 h-8 rounded-full bg-gray-800"
+                        />
+                        <div className="truncate text-sm font-medium text-white">
+                          {planet.name}
+                          <button
+                            disabled={loadingInsight}
+                            onClick={() => handleFetchAiInsight(planet.name)}
+                            className="ml-2 text-xs text-blue-400 hover:underline"
+                            title="Get AI Insight"
+                          >
+                            {loadingInsight ? "Loading..." : "AI Insight"}
+                          </button>
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 text-sm text-gray-300">
@@ -131,6 +179,12 @@ export default function PlanetsTable() {
               total={total}
               pageSize={15}
               onPageChange={setPage}
+            />
+
+            <AiInsightModal
+              name={selectedPlanet?.name}
+              description={insightDescription}
+              onClose={() => setSelectedPlanet(null)}
             />
           </>
         )}
