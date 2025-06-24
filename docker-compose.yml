@@ -51,12 +51,7 @@ services:
     ports:
       - "${NGINX_PORT}:80"   # Expose port 6969 externally
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      backend:
-        condition: service_healthy  # Wait for healthy backend
-      frontend:
-        condition: service_started  # frontend can start without healthcheck   
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro  
     networks:
       - starwars-net
     restart: unless-stopped 
