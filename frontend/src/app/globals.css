@@ -28,3 +28,92 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* Lightsaber-style table row hover (blue purple glow) */
+.lightsaber-hover:hover {
+  background-image: linear-gradient(
+    to right,
+    rgba(102, 51, 255, 0.1),   /* violet start */
+    rgba(102, 153, 255, 0.3),  /* soft blue middle */
+    rgba(102, 51, 255, 0.1)    /* violet end */
+  );
+  box-shadow: 0 0 8px 3px rgba(102, 153, 255, 0.6); /* blue-purple glow */
+  position: relative;
+  z-index: 1;
+}
+
+/* Lightsaber-style button (blue glow) */
+.lightsaber-button {
+  background: linear-gradient(to right, #1e1e2f, #2c2c44);
+  border: 1px solid rgba(102, 153, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 0 8px rgba(60, 30, 120, 0.4);
+}
+
+.lightsaber-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -50%;
+  width: 200%;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(102, 153, 255, 0.6),
+    transparent
+  );
+  transform: translateY(-50%);
+  animation: saber-sweep 1.5s linear infinite;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.lightsaber-button:hover::before {
+  transform: scaleY(1);
+}
+
+.lightsaber-button:hover {
+  box-shadow:
+    0 0 8px 3px rgba(102, 51, 204, 0.8),
+    0 0 16px 6px rgba(102, 51, 204, 0.5),
+    inset 0 0 10px rgba(102, 51, 204, 0.6);
+}
+
+
+@keyframes saber-sweep {
+  from {
+    left: -50%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+/* Galaxy-style link */
+.galaxy-link {
+  position: relative;
+  font-family: 'Orbitron', sans-serif; 
+}
+
+.galaxy-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(to right, #9281be, #5d4fe4, #8a2be2);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.galaxy-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
