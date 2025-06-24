@@ -35,3 +35,15 @@ export async function fetchPlanets(params = {}) {
 
   return fetcher(url.toString()); // This returns { count, next, previous, results }
 }
+
+
+/**
+ * Fetch AI-generated insight for a person or planet by name
+ * @param {string} name
+ */
+export async function fetchAiInsight(name) {
+  if (!name) return null;
+  const url = new URL(`${BASE_API_URL}/simulate-ai-insight`);
+  url.searchParams.append("name", name);
+  return fetcher(url.toString());
+}
