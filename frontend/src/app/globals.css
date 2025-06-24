@@ -123,3 +123,16 @@ html {
   transform: scaleX(1);
   transform-origin: left;
 }
+
+
+.lightsaber-glow:hover {
+  text-shadow:
+    0 0 5px #f59e0b,
+    0 0 10px #fbbf24,
+    0 0 20px #fbbf24,
+    0 0 40px #fbbf24;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
