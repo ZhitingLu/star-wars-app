@@ -27,7 +27,7 @@ export default function PlanetsTable() {
   } = useSwapiTable(fetchPlanets, "name");
 
   return (
-    <div className="bg-slate-900 py-8 mx-auto max-w-7xl rounded">
+    <div className="bg-slate-900 py-8 max-w-7xl mx-auto sm:mx-auto sm:px-0 lg:px-8 w-full rounded">
       <div className="flex items-center justify-between border-b border-white/10 py-3">
         <h2 className="px-4 text-base font-semibold text-white sm:px-6 lg:px-8">
           Planets
@@ -40,9 +40,9 @@ export default function PlanetsTable() {
         </div>
       </div>
 
-      <div style={{ minHeight: `768px` }}>
+      <div className="overflow-x-auto w-full" style={{ minHeight: `768px` }}>
         {loading ? (
-          <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
+          <table className="mt-6 w-full text-left whitespace-nowrap">
             <colgroup>
               <col className="w-full sm:w-4/12" />
               <col className="lg:w-2/12" />
