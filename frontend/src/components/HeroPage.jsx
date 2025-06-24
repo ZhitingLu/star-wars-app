@@ -6,7 +6,6 @@ import { Dialog, DialogPanel } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FaGithub } from "react-icons/fa6";
 
-
 const navigation = [
   { name: "People", href: "#people" },
   { name: "Planets", href: "#planets" },
@@ -123,7 +122,7 @@ export default function HeroPage() {
           <source src="/stars.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        
+
         <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -162,13 +161,21 @@ export default function HeroPage() {
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <a
-                  href="#"
-                  className="rounded-md bg-slate-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:hover:brightness-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
+                  href="#people"
+                  className="lightsaber-button px-6 py-3 text-sm font-bold text-white rounded-md transition duration-300 relative z-10 flex items-center gap-2"
                 >
-                  Browse People
+                  <img
+                    src="/icons/darth-vader.png"
+                    alt="Darth Vader Icon"
+                    className="w-6 h-6 object-contain"
+                  />
+                  <span className="z-20 relative">Browse People</span>
                 </a>
-                <a href="#" className="text-sm/6 font-semibold text-white">
-                  Explore Planets <span aria-hidden="true">→</span>
+                <a
+                  href="#planets"
+                  className="galaxy-link text-sm font-semibold text-indigo-300 hover:text-indigo-100 transition duration-300"
+                >
+                  🌌 Explore Planets <span aria-hidden="true">→</span>
                 </a>
               </div>
             </div>
