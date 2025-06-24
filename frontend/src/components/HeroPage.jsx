@@ -9,7 +9,7 @@ import { FaGithub } from "react-icons/fa6";
 const navigation = [
   { name: "People", href: "#people" },
   { name: "Planets", href: "#planets" },
-  { name: "About", href: "#" },
+  { name: "About", href: "#about" },
 ];
 
 export default function HeroPage() {
@@ -43,7 +43,7 @@ export default function HeroPage() {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-sm/6 font-semibold text-white"
+                className="text-sm/6 font-semibold font-orbitron text-white hover:text-amber-400 lightsaber-glow transition duration-300"
               >
                 {item.name}
               </a>
@@ -88,7 +88,7 @@ export default function HeroPage() {
                 <div className="space-y-2 py-6">
                   {navigation.map((item) => (
                     <a
-                    onClick={() => setMobileMenuOpen(false)}
+                      onClick={() => setMobileMenuOpen(false)}
                       key={item.name}
                       href={item.href}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-gray-800"
