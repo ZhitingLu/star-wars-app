@@ -1,0 +1,23 @@
+{
+  "family": "starwars-backend-task",
+  "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::404782754294:role/ecsTaskExecutionRole",
+  "cpu": "256",
+  "memory": "512",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "containerDefinitions": [
+    {
+      "name": "starwars-backend",
+      "image": "404782754294.dkr.ecr.eu-central-1.amazonaws.com/starwars-backend:latest",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true
+    }
+  ]
+}
