@@ -11,6 +11,10 @@ on:
 jobs:
   frontend-tests:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
 
     steps:
       - uses: actions/checkout@v4
@@ -28,6 +32,26 @@ jobs:
         working-directory: ./frontend
         run: npm test
 
-      - name: Build frontend Docker image
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
         run: |
           docker build -t starwars-frontend ./frontend
+          docker tag starwars-frontend:latest ${{ steps.ecr-login.outputs.registry }}/starwars-frontend:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ steps.ecr-login.outputs.registry }}/starwars-frontend:latest
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service --cluster starwars-cluster --service starwars-frontend-service --force-new-deployment --region ${{ secrets.AWS_REGION }}
