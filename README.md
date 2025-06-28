@@ -185,7 +185,7 @@ npx vitest
 
 - **Docker:** Multi-stage builds, docker-compose
 
-- **External API:** awapi.info
+- **External API:** swapi.info/api
 
 ---
 License
