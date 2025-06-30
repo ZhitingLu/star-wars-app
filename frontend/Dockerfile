@@ -13,6 +13,11 @@ RUN npm install
 # Copy the rest of the source code into the container
 COPY . .
 
+# Declare build argument
+ARG NEXT_PUBLIC_BACKEND_URL
+# Set environment variable for build process
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 # Build the Next.js app for production, generating optimized files in .next/
 RUN npm run build
 
@@ -37,6 +42,10 @@ COPY --from=builder /app/public ./public
 
 # Expose port 3000 to access the Next.js server externally
 EXPOSE 3000
+# Set environment variable for production
+ENV NODE_ENV=production 
+# Set the environment variable for the backend URL
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-/api}
 
 # Command to start the Next.js production server
 CMD ["npm", "start"]
