@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { fetchPlanets, fetchAiInsight } from "@/lib/swapiClient";
 import Pagination from "./Pagination";
 import SearchBar from "./SearchBar";
@@ -40,23 +40,23 @@ export default function PlanetsTable() {
   const [insightDescription, setInsightDescription] = useState("");
   const [loadingInsight, setLoadingInsight] = useState(false);
 
-async function handleFetchAiInsight(planetName) {
-  setLoadingInsight(true);
-  try {
-    setInsightDescription("");
-    const insight = await fetchAiInsight(planetName);
-    setInsightDescription(insight.description || "No AI insight available.");
+  async function handleFetchAiInsight(planetName) {
+    setLoadingInsight(true);
+    try {
+      setInsightDescription("");
+      const insight = await fetchAiInsight(planetName);
+      setInsightDescription(insight.description || "No AI insight available.");
 
-    const planet = planets.find((p) => p.name === planetName);
-    setSelectedPlanet(planet);
-  } catch (e) {
-    console.error("Error fetching AI insight:", e);
-    setInsightDescription("Failed to load AI insight.");
-    setSelectedPlanet({ name: planetName, url: null });
-  } finally {
-    setLoadingInsight(false);
+      const planet = planets.find((p) => p.name === planetName);
+      setSelectedPlanet(planet);
+    } catch (e) {
+      console.error("Error fetching AI insight:", e);
+      setInsightDescription("Failed to load AI insight.");
+      setSelectedPlanet({ name: planetName, url: null });
+    } finally {
+      setLoadingInsight(false);
+    }
   }
-}
 
   return (
     <div className="bg-slate-900 py-8 max-w-7xl mx-auto sm:mx-auto sm:px-0 lg:px-8 w-full rounded">
