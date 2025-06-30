@@ -48,9 +48,9 @@ jobs:
         run: |
           docker buildx build \
             --build-arg NEXT_PUBLIC_BACKEND_URL=/api \
-            -t starwars-frontend ./frontend
+            -t starwars-frontend ./frontend \
             --load
-            
+
           docker tag starwars-frontend:latest ${{ steps.ecr-login.outputs.registry }}/starwars-frontend:latest
 
       - name: Push Docker image to ECR
