@@ -59,4 +59,4 @@ jobs:
 
       - name: Update ECS service
         run: |
-          aws ecs update-service --cluster starwars-cluster --service starwars-frontend-service --force-new-deployment --region ${{ secrets.AWS_REGION }}
+          aws ecs update-service --cluster starwars-cluster --service starwars-frontend-task-service-bw85blmb --force-new-deployment --region ${{ secrets.AWS_REGION }}
