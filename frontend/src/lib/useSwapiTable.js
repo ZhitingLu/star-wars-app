@@ -13,6 +13,9 @@ export function useSwapiTable(fetchFunction, defaultSortBy = "name") {
   useEffect(() => {
     async function load() {
       setLoading(true);
+      const minLoadingTime = 500; // ms
+      const start = Date.now();
+
       try {
         const data = await fetchFunction({
           page,
@@ -20,6 +23,13 @@ export function useSwapiTable(fetchFunction, defaultSortBy = "name") {
           sort_by: sortBy,
           order,
         });
+
+        // wait if request was too fast
+        const elapsed = Date.now() - start;
+        if (elapsed < minLoadingTime) {
+          await new Promise((r) => setTimeout(r, minLoadingTime - elapsed));
+        }
+
         setItems(data.results);
         setTotal(data.count);
       } catch (e) {
