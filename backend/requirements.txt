@@ -1,3 +1,5 @@
+aiocache==0.12.3
+aiolimiter==1.2.1
 annotated-types==0.7.0
 anyio==4.9.0
 certifi==2025.6.15
