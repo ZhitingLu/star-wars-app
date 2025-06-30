@@ -53,3 +53,11 @@ jobs:
         run: |
           docker build -t starwars-backend ./backend
           docker tag starwars-backend:latest ${{ steps.ecr-login.outputs.registry }}/starwars-backend:latest
+
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ steps.ecr-login.outputs.registry }}/starwars-backend:latest
+
+      - name: Update backend ECS service
+        run: |
+          aws ecs update-service --cluster starwars-cluster --service starwars-backend-service-v2 --force-new-deployment --region ${{ secrets.AWS_REGION }}
