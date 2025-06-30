@@ -27,25 +27,27 @@ export default function PeopleTable() {
   const [insightDescription, setInsightDescription] = useState("");
   const [loadingInsight, setLoadingInsight] = useState(false);
 
- async function handleFetchAiInsight(personName) {
-  setLoadingInsight(true);
-  try {
-    setInsightDescription("");
-    const insight = await fetchAiInsight(personName);
-    // insight is an object, so extract description
-    setInsightDescription(insight.description || "No AI insight available.");
-    const person = people.find((p) => p.name === personName);
-    setSelectedPerson(person);
-  } catch (e) {
-    console.error("Error fetching AI insight:", e);
-    setInsightDescription("Failed to load AI insight.");
-    setSelectedPerson({ name: personName, url: null });
-  } finally {
-    setLoadingInsight(false);
+  async function handleFetchAiInsight(personName) {
+    setLoadingInsight(true);
+    try {
+      setInsightDescription("");
+      const insight = await fetchAiInsight(personName);
+      // insight is an object, so extract description
+      setInsightDescription(insight.description || "No AI insight available.");
+      const person = people.find((p) => p.name === personName);
+      setSelectedPerson(person);
+    } catch (e) {
+      console.error("Error fetching AI insight:", e);
+      setInsightDescription("Failed to load AI insight.");
+      setSelectedPerson({ name: personName, url: null });
+    } finally {
+      setLoadingInsight(false);
+    }
   }
-}
 
+  const BASE_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "/api";
 
+  console.log("Using API base URL:", BASE_API_URL);
 
   const getAvatarUrl = (personUrl) => {
     // Use regex to extract the numeric ID from the personUrl
@@ -73,6 +75,7 @@ export default function PeopleTable() {
         className="overflow-x-auto px-4 sm:px-0"
         style={{ minHeight: `768px` }}
       >
+    
         {loading ? (
           // Show skeleton rows while loading
           <table className="mt-6 w-full text-left whitespace-nowrap table-auto">
@@ -187,13 +190,13 @@ export default function PeopleTable() {
                 console.log("Page changed to:", newPage);
                 setPage(newPage);
               }}
-            /> 
+            />
 
             <AiInsightModal
-        name={selectedPerson?.name}
-        description={insightDescription}
-        onClose={() => setSelectedPerson(null)}
-      />
+              name={selectedPerson?.name}
+              description={insightDescription}
+              onClose={() => setSelectedPerson(null)}
+            />
           </>
         )}
       </div>
