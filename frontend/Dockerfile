@@ -1,6 +1,10 @@
 # Stage 1: Build the Next.js application
 FROM node:22-alpine AS builder
 
+# Declare build argument and set environment variable in builder stage
+ARG NEXT_PUBLIC_BACKEND_URL=/api
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 # Set working directory inside the container
 WORKDIR /app
 
@@ -19,13 +23,12 @@ RUN npm run build
 # Stage 2: Create the production image with minimal files
 FROM node:22-alpine
 
+# Declare build argument and set environment variable in final stage
+ARG NEXT_PUBLIC_BACKEND_URL=/api
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
 # Set working directory inside the container
 WORKDIR /app
-
-# Declare build argument
-ARG NEXT_PUBLIC_BACKEND_URL
-# Set environment variable for build process
-ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-/api}
 
 # Copy only the package.json files (if needed, e.g., for metadata or running scripts)
 COPY --from=builder /app/package*.json ./
@@ -41,6 +44,7 @@ COPY --from=builder /app/public ./public
 
 # Expose port 3000 to access the Next.js server externally
 EXPOSE 3000
+
 # Set environment variable for production
 ENV NODE_ENV=production 
 
