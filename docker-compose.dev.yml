@@ -31,8 +31,11 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    env_file:
+      - .env 
     command: npm run dev
     environment:
+      - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true  # Fixes file watching issues in Docker on some systems
     networks:
       - starwars-net
