@@ -44,11 +44,13 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Docker image with production env
+        # Use ALB path-based routing in production
         run: |
-          docker build \
-            # Use ALB path-based routing in production
+          docker buildx build \
             --build-arg NEXT_PUBLIC_BACKEND_URL=/api \
             -t starwars-frontend ./frontend
+            --load
+            
           docker tag starwars-frontend:latest ${{ steps.ecr-login.outputs.registry }}/starwars-frontend:latest
 
       - name: Push Docker image to ECR
