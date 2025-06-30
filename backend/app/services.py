@@ -1,24 +1,44 @@
 # For business logic and external API calls
 
 from datetime import datetime
+import os
 from typing import Any, Dict, List, Optional
-
+from aiocache import Cache
+from aiolimiter import AsyncLimiter
 import httpx
 
-BASE_SWAPI_URL = "https://swapi.info/api"
+# Base URL for SWAPI, can be overridden by environment variable
+BASE_SWAPI_URL = os.getenv("SWAPI_BASE_URL", "https://swapi.info/api")
 ALLOWED_SORT_FIELDS = {"name", "created"}
+
+# Initialize cache and rate limiter
+# Use aiocache with memory backend for local development
+# In production, use Redis or another persistent cache
+cache = Cache(Cache.MEMORY)  # Use Redis in production
+rate_limiter = AsyncLimiter(max_rate=5, time_period=1.0)  # 5 requests/second
 
 
 async def fetch_all_swapi_resource(resource: str) -> List[Dict[str, Any]]:
     url = f"{BASE_SWAPI_URL}/{resource}"
-    async with httpx.AsyncClient() as client:
-        response = await client.get(url)
-        response.raise_for_status()
-        data = response.json()
-        # If data is list, return it directly; else try "results"
-        if isinstance(data, list):
-            return data
-        return data.get("results", [])
+
+    # Try cache first
+    cached = await cache.get(url)
+    if cached:
+        return cached
+
+    async with rate_limiter:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            response.raise_for_status()
+            data = response.json()
+            if isinstance(data, list):
+                results = data
+            else:
+                results = data.get("results", [])
+
+            # Cache for 1 week (7 days * 24h * 3600s)
+            await cache.set(url, results, ttl=604800)
+            return results
 
 
 async def fetch_swapi_resource_by_url(url: str) -> Optional[Dict[str, Any]]:
