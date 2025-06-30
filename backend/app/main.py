@@ -4,6 +4,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import router
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
