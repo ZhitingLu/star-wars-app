@@ -1,31 +1,44 @@
+import os
 import pytest
 import respx
 from httpx import HTTPStatusError, Response
 
 from app.services import fetch_all_swapi_resource, fetch_swapi_resource_by_url
 
+BASE_SWAPI_URL = os.getenv("SWAPI_BASE_URL", "https://swapi.info/api")
+
 
 @pytest.mark.asyncio
 @respx.mock
-async def test_fetch_all_swapi_resource_list_response():
+async def test_fetch_all_swapi_resource_with_cache_and_rate_limit():
     resource = "people"
-    url = f"https://swapi.info/api/{resource}"
+    url = f"{BASE_SWAPI_URL}/{resource}"
 
-    # Mock a response that returns a list directly
-    respx.get(url).mock(
-        return_value=Response(200, json=[{"name": "Luke Skywalker"}])
-    )
+    # Mock first response
+    respx.get(url).mock(return_value=Response(
+        200,
+        json={"results": [{"name": "Luke Skywalker"}]
+              }
+    ))
 
+    # First call should hit the mocked HTTP endpoint and cache result
     data = await fetch_all_swapi_resource(resource)
     assert isinstance(data, list)
     assert data[0]["name"] == "Luke Skywalker"
+
+    # Clear respx mocks to ensure next call uses cache (no HTTP request)
+    respx.reset()
+
+    # Second call returns from cache
+    cached_data = await fetch_all_swapi_resource(resource)
+    assert cached_data == data
 
 
 @pytest.mark.asyncio
 @respx.mock
 async def test_fetch_all_swapi_resource_paginated_response():
     resource = "planets"
-    url = f"https://swapi.info/api/{resource}"
+    url = f"{BASE_SWAPI_URL}/{resource}"
 
     # Mock a paginated response with "results" key
     respx.get(url).mock(
@@ -47,7 +60,7 @@ async def test_fetch_all_swapi_resource_paginated_response():
 @respx.mock
 async def test_fetch_all_swapi_resource_raises_on_error():
     resource = "unicorns"  # Non-existent resource
-    url = f"https://swapi.info/api/{resource}"
+    url = f"{BASE_SWAPI_URL}/{resource}"
 
     # Mock a 404 error
     respx.get(url).mock(return_value=Response(404))
@@ -59,7 +72,7 @@ async def test_fetch_all_swapi_resource_raises_on_error():
 @pytest.mark.asyncio
 @respx.mock
 async def test_fetch_swapi_resource_by_url_success():
-    test_url = "https://swapi.info/api/planets/1"
+    test_url = f"{BASE_SWAPI_URL}/planets/1"
     expected_data = {"name": "Tatooine"}
 
     # Mock the request
@@ -75,7 +88,7 @@ async def test_fetch_swapi_resource_by_url_success():
 @pytest.mark.asyncio
 @respx.mock
 async def test_fetch_swapi_resource_by_url_not_found():
-    test_url = "https://swapi.info/api/planets/9999"
+    test_url = f"{BASE_SWAPI_URL}/planets/9999"
 
     respx.get(test_url).mock(return_value=Response(404))
 
