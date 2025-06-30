@@ -3,7 +3,7 @@
 import { fetcher } from "./fetcher";
 
 const BASE_API_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000/api";
+  process.env.NEXT_PUBLIC_BACKEND_URL || "/api";
 
 /**
  * Fetch paginated, searchable, sortable people list
