@@ -22,7 +22,7 @@ The app consists of two microservices:
 ### Backend
 
 - **Framework:** Python FastAPI
-- **Data Source:** Fetches Star Wars data from [awapi.info/api](https://awapi.info/api)
+- **Data Source:** Fetches Star Wars data from [awapi.info/api](https://swapi.info/api)
 - **Testing:** TDD with unittest and pytest
 - **Function:** Provides a REST API consumed by the frontend
 
@@ -114,6 +114,12 @@ npx vitest
   
 ### Backend
 - Backend source code lives in **/backend**
+
+  #### Start backend with (optional)
+    ```
+    cd backend/
+    uvicorn app.main:app --reload
+    ```
   
   
 ### Docker
