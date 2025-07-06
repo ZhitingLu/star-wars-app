@@ -16,4 +16,9 @@
 *.pyc
 __pycache__/
 
+# Ignore local CA bundles
+certifi-cacert.pem
+cacert.pem
+
+
 
