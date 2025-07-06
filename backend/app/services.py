@@ -26,6 +26,8 @@ async def fetch_all_swapi_resource(resource: str) -> List[Dict[str, Any]]:
     if cached:
         return cached
 
+    # Wait here if we've reached the rate limit (5 requests/sec).
+    # Helps prevent being blocked by SWAPI or causing server overload.
     async with rate_limiter:
         async with httpx.AsyncClient() as client:
             response = await client.get(url)
@@ -42,6 +44,7 @@ async def fetch_all_swapi_resource(resource: str) -> List[Dict[str, Any]]:
 
 
 async def fetch_swapi_resource_by_url(url: str) -> Optional[Dict[str, Any]]:
+    # Fetch a single resource by URL
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(url, follow_redirects=True)
@@ -59,8 +62,8 @@ async def fetch_swapi_resource_by_url(url: str) -> Optional[Dict[str, Any]]:
 
 async def get_filtered_sorted_paginated_items(
         resource: str,
-        page: int,
-        per_page: int = 15,
+        page: int,  # current page number (1-based)
+        per_page: int = 15,  # items per page
         search: Optional[str] = None,
         sort_by: str = "name",
         descending: bool = False,
@@ -72,19 +75,29 @@ async def get_filtered_sorted_paginated_items(
     filtered_items = filter_items_by_name(all_items, search)
 
     # Sort filtered items
+    # Will raise ValueError if sort_by not allowed.
     sorted_items = sort_items(filtered_items, sort_by, descending)
 
     # Paginate locally
+    # total_count: total number of items after filtering.
+    # start: starting index in the sorted list.
     total_count = len(sorted_items)
     start = (page - 1) * per_page
 
     # handle the case where page requested is beyond available pages gracefully
+    # If start index exceeds total items, return empty results.
+    # Otherwise, slice the list for current page.
     if start >= total_count:
         paginated_items = []
     else:
         paginated_items = sorted_items[start:start + per_page]
 
+    # Helper function to build URL for given page.
+    # Includes query params: page, search, sort_by, order.
+    # Returns None if page out of valid range.
+    # returned example: /people?page=2&search=Luke&sort_by=name&order=asc
     def build_page_url(p):
+        # calculate maximum valid page number
         if p < 1 or p > (total_count + per_page - 1) // per_page:
             return None
         params = [f"page={p}"]
@@ -98,6 +111,8 @@ async def get_filtered_sorted_paginated_items(
             params.append("order=asc")
         return f"/{resource}?" + "&".join(params)
 
+    # next_page: present if more items exist ahead.
+    # prev_page: present if not on first page.
     next_page = (
         build_page_url(page + 1)
         if start + per_page < total_count
@@ -105,6 +120,7 @@ async def get_filtered_sorted_paginated_items(
     )
     prev_page = build_page_url(page - 1) if page > 1 else None
 
+    # Return response in standard paginated format.
     return {
         "count": total_count,
         "next": next_page,
