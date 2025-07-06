@@ -34,8 +34,9 @@ async def health_check():
 # ----------------------------------------
 @router.get("/people", response_model=PaginatedResponse[Person])
 async def get_people(
-        page: int = Query(1, ge=1),
+        page: int = Query(1, ge=1),  # Page number, default 1, must be >=1
         search: Optional[str] = None,
+        # Optional search query for filtering by name
         sort_by: SortFields = SortFields.name,
         order: SortOrder = SortOrder.asc,
 ):
@@ -44,7 +45,7 @@ async def get_people(
         page=page,
         per_page=15,
         search=search,
-        sort_by=sort_by.value,
+        sort_by=sort_by.value,  # convert Enum to str
         descending=(order == SortOrder.desc),
     )
 
@@ -54,15 +55,18 @@ async def get_people(
         if person.get("homeworld")
     }
 
-    # Fetch each homeworld in parallel using your fetch by URL service
+    # Fetch each homeworld in parallel using fetch by URL service
+    # This avoids fetching the same homeworld multiple times
     homeworld_map = {}
     tasks = [
         services.fetch_swapi_resource_by_url(url)
         for url in unique_homeworlds
     ]
+
+    # Execute all fetches concurrently
     results = await asyncio.gather(*tasks)
 
-    # Build a URL → name map
+    # Build a mapping of homeworld URL → homeworld name
     for url, result in zip(unique_homeworlds, results):
         homeworld_map[url] = result.get("name") if result else "Unknown"
     print(homeworld_map)
@@ -92,6 +96,8 @@ async def get_planets(
     return data
 
 
+# It takes a required query parameter 'name'
+# representing the person or planet to analyze.
 @router.get("/simulate-ai-insight")
 async def simulate_ai_insight(name: str = Query(
     ...,
