@@ -167,7 +167,7 @@ class PaginatedResponse(BaseModel, Generic[T]):
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
-                "count": 82,
+                "count": 60,
                 "next": "https://swapi.info/api/planets?page=2",
                 "previous": None,
                 "results": [{
