@@ -26,6 +26,10 @@ The app consists of two microservices:
 - **Testing:** TDD with unittest and pytest
 - **Function:** Provides a REST API consumed by the frontend
 
+<img width="1264" height="966" alt="Screenshot from 2025-08-11 10-50-12" src="https://github.com/user-attachments/assets/bdbed520-ba55-42ec-a687-770fb7dd4485" />
+Visit diagram: https://app.eraser.io/workspace/20UscnuN2obEsL9kJt4h?origin=share
+
+
 ---
 
 ## Features
