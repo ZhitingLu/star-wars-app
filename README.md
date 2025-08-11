@@ -4,6 +4,11 @@ A Dockerized microservices application featuring a frontend built with Next.js a
 with Python FastAPI. The app fetches Star Wars data from an external API and demonstrates TDD practices across both
 services.
 
+<img width="1875" height="830" alt="image" src="https://github.com/user-attachments/assets/12b805a9-2517-448d-8208-2cd4f49ce8fd" />
+
+<img width="1687" height="1019" alt="image" src="https://github.com/user-attachments/assets/ce033371-09d7-4074-9f74-1d5a1c51c0fa" />
+
+
 Visit on AWS: http://starwars-alb-1097306309.eu-central-1.elb.amazonaws.com
 
 ---
