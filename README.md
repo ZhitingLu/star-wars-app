@@ -8,9 +8,6 @@ services.
 
 <img width="1687" height="1019" alt="image" src="https://github.com/user-attachments/assets/ce033371-09d7-4074-9f74-1d5a1c51c0fa" />
 
-
-Visit on AWS: http://starwars-alb-1097306309.eu-central-1.elb.amazonaws.com
-
 ---
 
 ## Architecture
